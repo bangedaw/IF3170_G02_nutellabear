@@ -119,3 +119,34 @@ def explore_data(df, save_dir=None):
     finish(fig, "correlation", save_dir)
 
     return corr[TARGET].drop(TARGET).sort_values(key=np.abs, ascending=False)
+
+def ks_statistic(a, b):
+    a, b = np.sort(np.asarray(a, dtype=float)), np.sort(np.asarray(b, dtype=float))
+    grid = np.concatenate([a, b])
+    cdf_a = np.searchsorted(a, grid, side="right") / len(a)
+    cdf_b = np.searchsorted(b, grid, side="right") / len(b)
+    return float(np.abs(cdf_a - cdf_b).max())
+
+def compare_train_test(train, test):
+    cols = [c for c in train.columns if c not in (ID_COL, TARGET) and c in test.columns]
+    rows = []
+    for c in cols:
+        tr, te = train[c], test[c]
+        row = {"feature": c, "miss_train_pct": round(tr.isna().mean() * 100, 2),
+               "miss_test_pct": round(te.isna().mean() * 100, 2)}
+        if pd.api.types.is_numeric_dtype(tr):
+            a, b = tr.dropna(), te.dropna()
+            row.update(kind="numeric", distance=round(ks_statistic(a, b), 4),
+                       mean_shift_std=round((b.mean() - a.mean()) / (a.std() or 1.0), 4))
+        else:
+            p = tr.value_counts(normalize=True)
+            q = te.value_counts(normalize=True)
+            levels = p.index.union(q.index)
+            tvd = 0.5 * (p.reindex(levels, fill_value=0) - q.reindex(levels, fill_value=0)).abs().sum()
+            row.update(kind="categorical", distance=round(float(tvd), 4),
+                       new_in_test=sorted(map(str, q.index.difference(p.index))))
+        rows.append(row)
+    out = pd.DataFrame(rows).set_index("feature")
+    print(f"=== Train ({len(train)}) vs test ({len(test)}) ===")
+    print(out.to_string())
+    return out
