@@ -156,9 +156,7 @@ class SVM:
 
     def plot_decision_boundary(self, X, y, path, feature_names=("x1", "x2"), title=None, max_points=1500):
         """[BONUS 4] Bidang pemisah f(x)=0, margin f(x)=±1, dan support vector. Model harus dilatih pada 2 fitur."""
-        import matplotlib
-        matplotlib.use("Agg")
-        import matplotlib.pyplot as plt
+        import matplotlib.pyplot as plt  # tanpa matplotlib.use("Agg"): itu mematikan plot inline di notebook
 
         X, y = np.asarray(X, dtype=float), np.asarray(y).astype(int)
         if X.shape[1] != 2 or self.support_vectors_.shape[1] != 2:
