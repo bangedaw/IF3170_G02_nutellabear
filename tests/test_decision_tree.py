@@ -18,6 +18,42 @@ def walk(root):
         stack.extend(node.children.values())
 
 
+def test_plot_tree_obeys_split_budget_and_preserves_predictions(tmp_path):
+    import matplotlib.pyplot as plt
+
+    X = np.arange(8, dtype=float).reshape(-1, 1)
+    y = np.array([0, 0, 1, 1, 0, 0, 1, 1])
+    model = DecisionTree().fit(X, y)
+    original = model.predict_proba(X)
+
+    with plt.rc_context({"svg.fonttype": "none"}):
+        for budget in (1, 3):
+            path = tmp_path / f"tree_{budget}.svg"
+            model.plot_tree(path, budget, feature_names=["days_before_arrival"])
+            svg = path.read_text(encoding="utf-8")
+            assert svg.count("Pemisah: days_before_arrival") == budget
+            assert ("Cabang diringkas" in svg) == (budget == 1)
+            assert "Ambang:" in svg and "P(batal):" in svg
+
+    np.testing.assert_array_equal(model.predict_proba(X), original)
+    with pytest.raises(ValueError, match="top_n"):
+        model.plot_tree(tmp_path / "invalid.svg", 0)
+
+
+def test_plot_tree_labels_categorical_branches(tmp_path):
+    import matplotlib.pyplot as plt
+
+    X = np.array([["Direct"], ["Direct"], ["Airline"], ["Airline"]], dtype=object)
+    model = DecisionTree(categorical_features=[0]).fit(X, [0, 0, 1, 1])
+    path = tmp_path / "categorical.svg"
+    with plt.rc_context({"svg.fonttype": "none"}):
+        model.plot_tree(path, top_n=7, feature_names=["booking_channel"])
+    svg = path.read_text(encoding="utf-8")
+    assert "Pemisah: booking_channel" in svg
+    assert "Direct" in svg and "Airline" in svg
+    assert "Cabang diringkas" not in svg and "Ambang:" not in svg
+
+
 def test_entropy_and_gain_hand_calculation():
     assert entropy([]) == 0
     assert entropy([0, 0]) == 0
