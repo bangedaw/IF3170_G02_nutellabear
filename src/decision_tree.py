@@ -358,6 +358,82 @@ class DecisionTree:
             raise ValueError("threshold harus angka finite dalam [0, 1].")
         return (self.predict_proba(X) >= threshold).astype(np.int64)
 
+    def plot_tree(self, path, top_n=3, *, feature_names=None):
+        """Simpan gambar yang membuka paling banyak top_n simpul pemisah dari akar per tingkat."""
+        self._check_fitted()
+        if isinstance(top_n, bool) or not isinstance(top_n, Integral) or top_n < 1:
+            raise ValueError("top_n harus bilangan bulat positif.")
+        names = ([f"X[{i}]" for i in range(self.n_features_in_)]
+                 if feature_names is None else list(feature_names))
+        if len(names) != self.n_features_in_:
+            raise ValueError("Jumlah nama fitur harus sama dengan jumlah kolom latih.")
+
+        import matplotlib.pyplot as plt
+
+        nodes, edges = [self.root], {}
+        for index, node in enumerate(nodes):
+            if node.is_leaf():
+                continue
+            if len(edges) == top_n:
+                break
+            children = []
+            for key, child in node.children.items():
+                children.append((len(nodes), key))
+                nodes.append(child)
+            edges[index] = children
+
+        terminals = [i for i in range(len(nodes)) if i not in edges]
+        # Susun terminal per subpohon agar garis antarcabang tidak berpotongan.
+        row, position = 0, {}
+        stack = [0]
+        while stack:
+            index = stack.pop()
+            if index in edges:
+                stack.extend(child for child, _ in reversed(edges[index]))
+            else:
+                position[index] = row
+                row += 1
+        for index in reversed(edges):
+            children = edges[index]
+            position[index] = (position[children[0][0]] + position[children[-1][0]]) / 2
+
+        depth = max(node.depth for node in nodes)
+        fig, ax = plt.subplots(figsize=(max(5, 4.4 * depth + 3), max(3.3, 0.68 * len(terminals) + 1)))
+        try:
+            for index, children in edges.items():
+                node = nodes[index]
+                x, y = node.depth, position[index]
+                for child, key in children:
+                    child_y = position[child]
+                    ax.plot([x, x + 0.5, x + 0.5, x + 1],
+                            [y, y, child_y, child_y], color="#64748b", linewidth=1)
+                    label = str(key) if node.categorical else ("≤" if key == 0 else ">")
+                    ax.text(x + 0.63, child_y, label, ha="center", va="center",
+                            fontsize=8, parse_math=False,
+                            bbox={"facecolor": "white", "edgecolor": "none", "pad": 1})
+
+            for index, node in enumerate(nodes):
+                if index in edges:
+                    name = str(names[node.feature])
+                    rule = name if node.categorical else f"{name}\nAmbang: {node.threshold:.6g}"
+                    label, color = f"Pemisah: {rule}", "#dbeafe"
+                elif node.is_leaf():
+                    label, color = "Daun", "#dcfce7"
+                else:
+                    label, color = "Cabang diringkas", "#fef3c7"
+                label += f"\nP(batal): {node.probability:.1%} · bobot: {node.class_counts.sum():.1f}"
+                ax.text(node.depth, position[index], label, ha="center", va="center", fontsize=8,
+                        parse_math=False, bbox={"boxstyle": "round,pad=0.35", "facecolor": color,
+                                               "edgecolor": "#64748b"})
+
+            ax.set_xlim(-0.35, depth + 0.35)
+            ax.set_ylim(len(terminals) - 0.35, -0.65)
+            ax.set_axis_off()
+            ax.set_title(f"Pohon keputusan C4.5 · {len(edges)} simpul pemisah ditampilkan (top_n={top_n})")
+            fig.savefig(path, dpi=150, bbox_inches="tight", facecolor="white")
+        finally:
+            plt.close(fig)
+
     def save(self, path):
         """Simpan model terlatih dengan pickle dari standard library."""
         self._check_fitted()
