@@ -49,6 +49,21 @@ def build_pipeline(scaler="standard", cyclic=False, log=False):
     return PreparationPipeline(steps)
 
 
+COMBO = {"k": 15, "metric": "manhattan", "p": 1, "weights": "distance", "gamma": 0.5, "top_k": 20}
+
+
+def missing_as_category(df, cols=("meal_package", "room_category", "booking_channel")):
+    df = df.copy()
+    for c in cols:
+        df[c] = df[c].fillna("Missing")
+    return df
+
+
+def combo_pipeline():
+    """Tanpa fitur turunan, bulan siklik, kategori hilang menjadi "Missing", tanpa pemotongan outlier."""
+    return PreparationPipeline([cyclic_month, missing_as_category, Imputer(), CategoricalEncoder(), Scaler("standard")])
+
+
 def column_mutual_information(X, y, n_bins=20):
     X = np.asarray(X, dtype=float)
     y = np.asarray(y).astype(int)
