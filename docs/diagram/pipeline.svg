@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" width="760" height="420" role="img" aria-labelledby="t d">
+<title id="t">Alur pengolahan data</title>
+<desc id="d">train.csv dibagi berstrata 80:20 menjadi data latih dan validasi. Data latih dibersihkan, lalu PreparationPipeline di-fit hanya pada data latih bersih. Data validasi dan test.csv hanya di-transform. Pipeline menghasilkan tampilan numerik untuk KNN, regresi logistik, dan SVM, serta tampilan pohon untuk DTL C4.5 dan Naive Bayes. Keduanya mendahului evaluasi validasi dan submission Kaggle.</desc>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#59687d"/></marker></defs>
+<rect x="1" y="1" width="758" height="418" rx="12" fill="#ffffff" stroke="#dce2e9"/>
+<rect x="20" y="40" width="150" height="56" rx="8" fill="#e9f6f0" stroke="#205c4a" stroke-width="2"/>
+<text x="95" y="64" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="#18212f">train.csv</text>
+<text x="95" y="82" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">27.373 baris berlabel</text>
+<rect x="210" y="40" width="160" height="56" rx="8" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="290" y="64" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="#18212f">Split berstrata</text>
+<text x="290" y="82" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">80 : 20, seed 42</text>
+<rect x="410" y="18" width="150" height="48" rx="8" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="485" y="47" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="#18212f">Latih (21.898)</text>
+<rect x="410" y="78" width="150" height="48" rx="8" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="485" y="107" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="#18212f">Validasi (5.475)</text>
+<rect x="596" y="18" width="144" height="56" rx="8" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="668" y="42" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="#18212f">Cleaning</text>
+<text x="668" y="60" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">duplikat, invalid</text>
+<rect x="20" y="214" width="150" height="56" rx="8" fill="#e9f6f0" stroke="#205c4a" stroke-width="2"/>
+<text x="95" y="238" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="#18212f">test.csv</text>
+<text x="95" y="256" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">6.844 baris</text>
+<path d="M170 68H208" fill="none" stroke="#59687d" stroke-width="1.5" marker-end="url(#arr)"/>
+<path d="M370 60L408 44" fill="none" stroke="#59687d" stroke-width="1.5" marker-end="url(#arr)"/>
+<path d="M370 76L408 100" fill="none" stroke="#59687d" stroke-width="1.5" marker-end="url(#arr)"/>
+<path d="M560 42H594" fill="none" stroke="#59687d" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="350" y="172" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="700" letter-spacing=".04em" text-anchor="start" fill="#59687d">PIPELINE: FIT PADA DATA LATIH</text>
+<path d="M95 214V150H668" fill="none" stroke="#59687d" stroke-width="1.5"/>
+<path d="M668 74V150" fill="none" stroke="#59687d" stroke-width="1.5"/>
+<path d="M485 126V150" fill="none" stroke="#59687d" stroke-width="1.5"/>
+<path d="M335 150V180" fill="none" stroke="#59687d" stroke-width="1.5" marker-end="url(#arr)"/>
+<path d="M615 150V180" fill="none" stroke="#59687d" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="210" y="182" width="250" height="108" rx="8" fill="#e9f1fc" stroke="#1d5c9b" stroke-width="2"/>
+<text x="335" y="214" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="#18212f">Tampilan numerik</text>
+<text x="335" y="232" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">fitur turunan, imputasi, clipping</text>
+<text x="335" y="250" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">one-hot, standardisasi</text>
+<text x="335" y="268" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">KNN, LR, SVM</text>
+<rect x="490" y="182" width="250" height="108" rx="8" fill="#e9f1fc" stroke="#1d5c9b" stroke-width="2"/>
+<text x="615" y="214" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="#18212f">Tampilan pohon</text>
+<text x="615" y="232" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">fitur turunan, kategori teks</text>
+<text x="615" y="250" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">nilai hilang dipertahankan</text>
+<text x="615" y="268" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">DTL C4.5, Naive Bayes</text>
+<path d="M335 290V318H615V290" fill="none" stroke="#59687d" stroke-width="1.5"/>
+<path d="M335 318V342" fill="none" stroke="#59687d" stroke-width="1.5" marker-end="url(#arr)"/>
+<path d="M615 318V342" fill="none" stroke="#59687d" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="210" y="344" width="250" height="56" rx="8" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="335" y="368" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="#18212f">Evaluasi validasi</text>
+<text x="335" y="386" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">akurasi, presisi, recall, F1, ROC-AUC</text>
+<rect x="490" y="344" width="250" height="56" rx="8" fill="#e9f6f0" stroke="#205c4a" stroke-width="2"/>
+<text x="615" y="368" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="#18212f">Submission Kaggle</text>
+<text x="615" y="386" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">fit ulang seluruh train, tulis CSV</text>
+</svg>
