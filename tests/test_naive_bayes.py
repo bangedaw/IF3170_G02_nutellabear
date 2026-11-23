@@ -73,3 +73,31 @@ def test_save_and_load_give_identical_predictions():
     with tempfile.TemporaryDirectory() as d:
         m.save(Path(d) / "nb.pkl")
         assert (NaiveBayes.load(Path(d) / "nb.pkl").predict_proba(X_te) == m.predict_proba(X_te)).all()
+
+
+def test_mdl_cut_points_find_single_and_double_boundaries():
+    from naive_bayes import mdl_cut_points
+    x = np.arange(100.0)
+    assert np.allclose(mdl_cut_points(x, (x >= 50).astype(int)), [49.5])
+    assert np.allclose(mdl_cut_points(x, ((x >= 30) & (x < 70)).astype(int)), [29.5, 69.5])
+
+
+def test_mdl_cut_points_reject_noise_and_ignore_missing():
+    from naive_bayes import mdl_cut_points
+    r = np.random.default_rng(0)
+    assert len(mdl_cut_points(r.normal(size=300), r.integers(0, 2, 300))) == 0
+    x = np.r_[np.arange(100.0), [np.nan] * 20]
+    y = np.r_[(np.arange(100) >= 50).astype(int), r.integers(0, 2, 20)]
+    assert np.allclose(mdl_cut_points(x, y), [49.5])
+
+
+def test_naive_bayes_mdl_option_runs_and_keeps_default_unchanged():
+    from naive_bayes import NaiveBayes
+    r = np.random.default_rng(1)
+    y = r.integers(0, 2, 600)
+    X = pd.DataFrame({"num": y * 2.0 + r.normal(size=600), "noise": r.normal(size=600), "cat": r.choice(["a", "b"], 600)})
+    X.loc[X.index[:30], "num"] = np.nan
+    mdl = NaiveBayes(discretization="mdl").fit(X, y)
+    assert len(mdl.edges_["num"]) >= 1 and len(mdl.edges_["noise"]) == 0
+    assert ((mdl.predict_proba(X) >= 0) & (mdl.predict_proba(X) <= 1)).all()
+    assert len(NaiveBayes().fit(X, y).edges_["num"]) > len(mdl.edges_["num"])
