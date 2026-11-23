@@ -129,3 +129,33 @@ def test_evaluate_fold_and_summarize_on_schema_frame():
     assert len(rows) == 3 and rows["nodes"].is_monotonic_decreasing and rows["nodes"].iloc[-1] == 1
     assert rows["accuracy"].between(0, 1).all()
     assert summarize(rows)["accuracy"].is_monotonic_decreasing
+
+
+def test_mdl_penalty_matches_hand_computation():
+    from dtl_tuning import MDLDecisionTree
+    split = MDLDecisionTree(min_gain=1e-12)._best_numeric(np.array([1.0, 2, 3, 4]), np.array([0, 0, 1, 1]), np.ones(4), 0)
+    assert split.threshold == 2.5
+    assert np.isclose(split.gain, 1.0 - np.log2(3) / 4)
+
+
+def test_mdl_rejects_numeric_split_whose_gain_does_not_cover_the_penalty():
+    from dtl_tuning import MDLDecisionTree
+    x, y = np.arange(8.0), np.array([0, 1, 0, 1, 0, 1, 0, 1])
+    assert DecisionTree(min_gain=1e-12)._best_numeric(x, y, np.ones(8), 0) is not None
+    assert MDLDecisionTree(min_gain=1e-12)._best_numeric(x, y, np.ones(8), 0) is None
+
+
+def test_mdl_grows_a_smaller_tree_on_noisy_data_and_round_trips(tmp_path):
+    X, y = noisy_data(2000, 1)
+    plain = PrunedDecisionTree(max_depth=None, top_k=0, alpha=0).fit(X, y)
+    mdl = PrunedDecisionTree(max_depth=None, top_k=0, alpha=0, mdl="gain").fit(X, y)
+    assert mdl.n_nodes_ < plain.n_nodes_ / 2
+    mdl.save(tmp_path / "mdl.bin")
+    assert np.array_equal(PrunedDecisionTree.load(tmp_path / "mdl.bin").predict_proba(X), mdl.predict_proba(X))
+
+
+def test_tuned_pipeline_impute_leaves_no_missing_values():
+    from dtl_tuning import tuned_pipeline
+    df = schema_frame()
+    X, _ = tuned_pipeline(impute=True).fit(df).transform(df)
+    assert not X.isna().any().any() and "total_nights" not in X.columns
