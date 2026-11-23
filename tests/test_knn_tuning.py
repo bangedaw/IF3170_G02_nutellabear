@@ -127,3 +127,18 @@ def test_evaluate_fold_runs_on_schema_and_summarize_ranks():
     assert rows["accuracy"].between(0, 1).all()
     ranked = summarize(rows)
     assert ranked["accuracy"].is_monotonic_decreasing
+
+
+def test_missing_as_category_and_combo_pipeline_run_on_schema():
+    from knn_tuning import COMBO, combo_pipeline, missing_as_category
+    df = schema_frame()
+    df.loc[df.index[:30], "meal_package"] = np.nan
+    out = missing_as_category(df)
+    assert (out["meal_package"].iloc[:30] == "Missing").all() and df["meal_package"].iloc[:30].isna().all()
+    pipe = combo_pipeline().fit(df.iloc[:400])
+    X_tr, y_tr = pipe.transform(df.iloc[:400])
+    X_va, _ = pipe.transform(df.iloc[400:])
+    assert "meal_package=Missing" in X_tr.columns and "total_nights" not in X_tr.columns
+    assert not X_tr.isna().any().any() and not X_va.isna().any().any()
+    proba = WeightedKNN(**COMBO).fit(X_tr, y_tr).predict_proba(X_va)
+    assert proba.shape == (100,)
