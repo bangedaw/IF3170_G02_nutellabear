@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" width="760" height="300" role="img" aria-labelledby="t d">
+<title id="t">Stratified 5-fold cross-validation</title>
+<desc id="d">Data dibagi menjadi lima lipatan dengan proporsi kelas yang sama. Pada lipatan ke-i, bagian ke-i menjadi data validasi dan empat bagian lain menjadi data latih tempat pipeline di-fit. Lima skor validasi kemudian dirata-rata.</desc>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#59687d"/></marker></defs>
+<rect x="1" y="1" width="758" height="298" rx="12" fill="#ffffff" stroke="#dce2e9"/>
+<text x="20" y="32" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="700" letter-spacing=".04em" text-anchor="start" fill="#59687d">STRATIFIED 5-FOLD CROSS-VALIDATION</text>
+<text x="70" y="70" font-family="Inter, system-ui, sans-serif" font-size="13" text-anchor="end" fill="#18212f">Lipatan 1</text>
+<rect x="90" y="50" width="108" height="30" rx="6" fill="#e9f1fc" stroke="#1d5c9b" stroke-width="2"/>
+<text x="144" y="70" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#18212f">validasi</text>
+<rect x="202" y="50" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="256" y="70" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="314" y="50" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="368" y="70" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="426" y="50" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="480" y="70" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="538" y="50" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="592" y="70" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<path d="M650 65H684" fill="none" stroke="#59687d" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="70" y="108" font-family="Inter, system-ui, sans-serif" font-size="13" text-anchor="end" fill="#18212f">Lipatan 2</text>
+<rect x="90" y="88" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="144" y="108" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="202" y="88" width="108" height="30" rx="6" fill="#e9f1fc" stroke="#1d5c9b" stroke-width="2"/>
+<text x="256" y="108" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#18212f">validasi</text>
+<rect x="314" y="88" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="368" y="108" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="426" y="88" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="480" y="108" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="538" y="88" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="592" y="108" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<path d="M650 103H684" fill="none" stroke="#59687d" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="70" y="146" font-family="Inter, system-ui, sans-serif" font-size="13" text-anchor="end" fill="#18212f">Lipatan 3</text>
+<rect x="90" y="126" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="144" y="146" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="202" y="126" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="256" y="146" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="314" y="126" width="108" height="30" rx="6" fill="#e9f1fc" stroke="#1d5c9b" stroke-width="2"/>
+<text x="368" y="146" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#18212f">validasi</text>
+<rect x="426" y="126" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="480" y="146" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="538" y="126" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="592" y="146" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<path d="M650 141H684" fill="none" stroke="#59687d" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="70" y="184" font-family="Inter, system-ui, sans-serif" font-size="13" text-anchor="end" fill="#18212f">Lipatan 4</text>
+<rect x="90" y="164" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="144" y="184" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="202" y="164" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="256" y="184" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="314" y="164" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="368" y="184" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="426" y="164" width="108" height="30" rx="6" fill="#e9f1fc" stroke="#1d5c9b" stroke-width="2"/>
+<text x="480" y="184" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#18212f">validasi</text>
+<rect x="538" y="164" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="592" y="184" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<path d="M650 179H684" fill="none" stroke="#59687d" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="70" y="222" font-family="Inter, system-ui, sans-serif" font-size="13" text-anchor="end" fill="#18212f">Lipatan 5</text>
+<rect x="90" y="202" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="144" y="222" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="202" y="202" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="256" y="222" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="314" y="202" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="368" y="222" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="426" y="202" width="108" height="30" rx="6" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="480" y="222" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">latih</text>
+<rect x="538" y="202" width="108" height="30" rx="6" fill="#e9f1fc" stroke="#1d5c9b" stroke-width="2"/>
+<text x="592" y="222" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#18212f">validasi</text>
+<path d="M650 217H684" fill="none" stroke="#59687d" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="688" y="108" width="56" height="104" rx="8" fill="#e9f6f0" stroke="#205c4a" stroke-width="2"/>
+<text x="716" y="147" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="#18212f">Skor</text>
+<text x="716" y="165" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">rata-</text>
+<text x="716" y="183" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="middle" fill="#59687d">rata</text>
+<rect x="90" y="252" width="22" height="16" rx="4" fill="#f8fafc" stroke="#bcc7d4" stroke-width="1.5"/>
+<text x="120" y="265" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="start" fill="#59687d">data latih lipatan, pipeline di-fit di sini</text>
+<rect x="440" y="252" width="22" height="16" rx="4" fill="#e9f1fc" stroke="#1d5c9b" stroke-width="2"/>
+<text x="470" y="265" font-family="Inter, system-ui, sans-serif" font-size="12" text-anchor="start" fill="#59687d">data validasi lipatan</text>
+</svg>
