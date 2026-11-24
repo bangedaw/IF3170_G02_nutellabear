@@ -4,11 +4,11 @@ Repositori Tugas Besar 2 IF3170 Inteligensi Artifisial 2026/2027. Proyek ini mem
 
 | Lokasi | Isi |
 | --- | --- |
-| [Notebook pengumpulan](nb/Notebook_Template_Tugas_Besar_2_IF3170_Inteligensi_Artifisial_2026_2027.ipynb) | Eksplorasi data, prapemrosesan, pelatihan, evaluasi, penyimpanan model, dan pembuatan CSV. |
+| [Notebook pengumpulan](nb/Notebook_Tugas_Besar_2_IF3170_Inteligensi_Artifisial_2026_2027.ipynb) | Eksplorasi data, prapemrosesan, pelatihan, evaluasi, penyimpanan model, dan pembuatan CSV. |
 | [`src/`](src/) | Implementasi model, prapemrosesan, evaluasi, dan modul eksperimen tambahan. |
 | [`tests/`](tests/) | Pengujian implementasi. |
 | [`output/`](output/) | CSV prediksi dan gambar hasil eksperimen. |
-| [Laporan](docs/laporan.pdf) | Metode, hasil, dan pembagian tugas. [Sumber LaTeX](docs/laporan.tex). |
+| [Laporan](docs/laporan.pdf) | Metode, hasil, dan pembagian tugas. |
 
 ## Persiapan dan cara menjalankan
 
@@ -24,7 +24,9 @@ Repositori Tugas Besar 2 IF3170 Inteligensi Artifisial 2026/2027. Proyek ini mem
 3. Buka notebook pengumpulan, pilih kernel **Python (IF3170)**, lalu pilih **Run All**. Folder keluaran bawaan adalah `output/`. Atur `IF3170_OUTPUT_DIR` ke folder lain jika ingin membandingkan hasil baru dengan artefak yang sudah ada. Di Kaggle, tambahkan dataset kompetisi sebagai input, lalu jalankan notebook. Keluaran disimpan di `/kaggle/working/output/`.
 4. Jalankan pengujian dari akar repositori dengan `.\.venv\Scripts\python.exe -m pytest -q`.
 
-Notebook menghasilkan `submission.csv` dari KNN dasar serta CSV untuk empat keluarga model lainnya. CSV eksperimen tambahan di `output/`, seperti DTL dengan penalti MDL dan KNN dengan *pipeline* kombinasi, berasal dari jalur eksperimen di `src/` yang dibahas dalam laporan.
+Notebook menghasilkan `submission_knn_v3.csv` sebagai berkas pengumpulan akhir. Berkas `submission.csv` tetap berisi prediksi KNN dasar untuk perbandingan lima keluarga model. CSV DTL dengan penalti MDL dan KNN dengan *pipeline* kombinasi di `output/` berasal dari eksperimen terpisah di `src/` yang dibahas dalam laporan.
+
+Sel bonus regresi logistik menghasilkan animasi kontur `lr_loss_contour.mp4` jika FFmpeg tersedia di `PATH`. Jika FFmpeg tidak tersedia, sel tersebut menghasilkan `lr_loss_contour.gif`.
 
 ## Pembagian tugas
 
