@@ -3,7 +3,7 @@
 \subsection{Rancangan Eksperimen}
 Seluruh model dievaluasi pada 5.475 baris validasi yang sama, hasil pembagian berstrata dengan \texttt{seed=42}. Model dilatih pada 21.856 baris latih yang telah dibersihkan. Untuk konfigurasi terpilih, validasi silang lima lipatan dijalankan pada seluruh \path{train.csv}, dengan pipeline di-\textit{fit} ulang pada setiap lipatan. Metrik berbasis label memakai ambang 0,5, kecuali pada analisis \textit{cost-sensitive}.
 
-Metrik utama pemilihan konfigurasi adalah akurasi, sesuai metrik yang diasumsikan untuk leaderboard Kaggle. F1 kelas batal dan ROC-AUC dilaporkan sebagai pelengkap, karena akurasi saja dapat menyamarkan kemampuan model mendeteksi kelas minoritas. Setiap akurasi dibandingkan dengan baseline kelas mayoritas sebesar 0,6723.
+Metrik utama pada perbandingan per algoritma adalah akurasi. Metrik leaderboard Kaggle adalah \textit{macro} F1 (rata-rata F1 kelas 0 dan kelas 1), sehingga model akhir pada Subbab~\ref{sec:model-akhir} dipilih dengan \textit{macro} F1 validasi silang. F1 kelas batal dan ROC-AUC dilaporkan sebagai pelengkap, karena akurasi saja dapat menyamarkan kemampuan model mendeteksi kelas minoritas. Setiap akurasi dibandingkan dengan baseline kelas mayoritas sebesar 0,6723.
 
 Angka pada bab ini berasal dari eksekusi ulang notebook pengumpulan dari sel pertama hingga terakhir dengan versi pustaka pada \path{requirements.txt}. Eksekusi ulang menghasilkan CSV KNN, DTL, \textit{logistic regression}, dan \textit{Naive Bayes} yang identik dengan berkas pada \path{output/}. CSV SVM polinomial berbeda pada 9 dari 6.844 baris, yang diduga berasal dari perbedaan pembulatan aritmetika titik mengambang pada SMO. Selisih kecil juga terlihat pada metrik DTL dibanding catatan di notebook (akurasi 0,8451 berbanding 0,8449), tetapi CSV DTL tetap identik.
 
@@ -527,5 +527,32 @@ Kedua cara memberi kinerja yang hampir sama. Pada validasi silang, selisih akura
 
 Seleksi orde kedua mengurangi jumlah iterasi 3,2 kali pada kernel Gaussian dan 6,2 kali pada kernel polinomial. Pada kernel linear, versi orde pertama berhenti di batas 100.000 iterasi tanpa konvergen, sedangkan versi orde kedua konvergen pada 54.788 iterasi. Waktu \textit{fit} turun lebih sedikit daripada jumlah iterasi karena waktu tersebut juga mencakup perhitungan matriks kernel dan \textit{Platt scaling}. Akurasi, presisi, \textit{recall}, F1, dan ROC-AUC kedua versi sama hingga empat desimal pada ketiga kernel, dan tanda nilai keputusan pada data validasi sama pada sedikitnya 99,89\% baris. Hasil ini sesuai dengan rancangannya. Kriteria berhenti tidak berubah, sehingga kedua versi mencapai solusi dual yang sama dan perbedaannya hanya pada jalan menuju solusi. Penghematan waktu ini dapat dipakai untuk melatih SVM pada subsampel yang lebih besar.
 
+\subsection{Model Akhir}\label{sec:model-akhir}
+Setelah perbandingan antarmodel, KNN dikembangkan lebih lanjut dengan kriteria \textit{macro} F1. Setiap varian dinilai dengan validasi silang berstrata lima lipatan (\texttt{seed=42}) pada \path{train.csv}. Pipeline, bobot \textit{mutual information}, dan imputasi di-\textit{fit} ulang pada setiap lipatan. Tabel~\ref{tab:model-akhir} merangkum langkah yang menaikkan skor, memakai ambang terbaik pada prediksi \textit{out-of-fold}.
+
+\begin{table}[htbp]
+    \centering
+    \small
+    \begin{tabular}{@{}l r@{}}
+        \toprule
+        Konfigurasi KNN (jarak Manhattan) & \textit{Macro} F1 CV \\
+        \midrule
+        $k=25$, bobot $1/d$, fitur standar & 0,8228 \\
+        + fitur tanggal, bobot kolom $(\mathrm{MI}/\overline{\mathrm{MI}})^{0{,}5}$, $k=15$ & 0,8406 \\
+        + pengali per atribut hasil \textit{coordinate ascent} & 0,8489 \\
+        + imputasi KNN untuk \texttt{days\_before\_arrival} & 0,8497 \\
+        + $k=18$, bobot tetangga $1/d^{1{,}5}$ (model akhir) & \textbf{0,8525} \\
+        \bottomrule
+    \end{tabular}
+    \caption{Pengembangan KNN menuju model akhir (validasi silang lima lipatan, ambang terbaik).}
+    \label{tab:model-akhir}
+\end{table}
+
+Pengali per atribut dicari dengan \textit{coordinate ascent} atas nilai $\{0; 0{,}5; 1{,}5; 2{,}5\}$. Skor pencarian hanya memakai lipatan 0--2, sedangkan lipatan 3--4 menjadi \textit{holdout}. Pada \textit{holdout}, skor naik dari 0,8447 menjadi 0,8503. Pencarian membuang hari dalam minggu, hari dalam tahun, tarif per tamu, indikator \texttt{special\_requests} hilang, dan harga total (pengali 0). Bobot \texttt{arrival\_month} dan \texttt{total\_nights} dikecilkan menjadi 0,5. Bobot tanggal pemesanan dan \texttt{needs\_parking} dinaikkan menjadi 1,5, dan \texttt{booking\_channel} menjadi 2,5. Putaran pencarian kedua tidak mengubah pengali. Imputasi KNN menaikkan akurasi pada baris dengan \texttt{days\_before\_arrival} hilang dari 0,791 menjadi 0,811. Bobot $1/d^{1{,}5}$ memberi kenaikan yang konsisten pada rentang $k=12$ hingga $22$.
+
+Model akhir memakai ambang 0,5 dan memperoleh \textit{macro} F1 validasi silang 0,8521 dengan ROC-AUC 0,9306. Ambang terbaik hanya menambah 0,0004, sehingga ambang tidak diubah. Karena pengali dipilih dengan lipatan yang sama, angka validasi silang ini sedikit optimistis. Skor \textit{holdout} di atas memberi perkiraan yang lebih jujur.
+
+Beberapa varian lain tidak menaikkan skor. \textit{Target encoding} kelompok tanggal kedatangan dan \textit{lead time} menurunkan \textit{macro} F1 KNN menjadi 0,833. Jarak yang mengabaikan nilai hilang menghasilkan 0,8375. Indikator nilai hilang untuk semua kolom menurunkan skor ke sekitar 0,79. SVM Gaussian pada seluruh data latih dengan bobot kolom yang sama hanya mencapai 0,8279. DTL terbaik (kedalaman 18 dengan fitur tanggal) mencapai 0,8337.
+
 \subsection{\textit{Submission} Kaggle}
-Lima CSV dihasilkan dari konfigurasi pengumpulan, masing-masing satu per algoritma, dengan proporsi prediksi batal 24,6\% hingga 28,7\%. CSV DTL C4.5 dikirim ke Kaggle dan memperoleh skor publik 0,82005. Skor ini sekitar 2,5 poin persentase di bawah akurasi validasi lokal DTL (0,8451). Selisih tersebut dapat berasal dari variasi sampel pada leaderboard publik dan dari perbedaan metrik leaderboard, karena metrik yang dipakai Kaggle tidak diketahui secara pasti. Notebook pengumpulan bersifat \textit{reproducible} karena eksekusi ulang dari sel pertama menghasilkan \path{submission_decision_tree.csv} yang identik dengan berkas pada \path{output/}.
+Lima CSV dihasilkan dari konfigurasi pengumpulan, masing-masing satu per algoritma, dengan proporsi prediksi batal 24,6\% hingga 28,7\%. CSV DTL C4.5 dikirim ke Kaggle dan memperoleh skor publik 0,82005. Skor ini sekitar 2,5 poin persentase di bawah akurasi validasi lokal DTL (0,8451). Selisih tersebut dapat berasal dari variasi sampel pada leaderboard publik dan dari perbedaan metrik leaderboard, karena metrik yang dipakai Kaggle tidak diketahui secara pasti. Notebook pengumpulan bersifat \textit{reproducible} karena eksekusi ulang dari sel pertama menghasilkan \path{submission_decision_tree.csv} yang identik dengan berkas pada \path{output/}. Untuk KNN berbobot dengan kriteria \textit{macro} F1, skor publik naik dari 0,85166 (bobot \textit{mutual information} saja) menjadi 0,86060 (dengan pengali per atribut). \textit{Submission} akhir kelompok adalah \path{submission_knn_v3.csv} dari model pada Subbab~\ref{sec:model-akhir}, yang dihasilkan oleh \texttt{make\_final\_submission} pada \path{src/knn_final.py} dan oleh sel \textit{Submission} akhir pada notebook. \textit{Submission} ini memperoleh skor publik \textbf{0,86239}, tertinggi di antara seluruh \textit{submission} kelompok. Prediksi batalnya 30,5\%, dan 97,4\% barisnya sama dengan \textit{submission} 0,86060.
