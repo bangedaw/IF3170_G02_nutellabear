@@ -121,6 +121,8 @@ def kneighbors(self, X):
 
 Pemilihan $k$ tetangga memakai \texttt{np.argpartition} yang berjalan dalam waktu linear, lalu hanya $k$ jarak terpilih yang diurutkan. \texttt{predict\_proba} mengikuti Persamaan~\ref{eq:knn-proba}. Pada pembobotan \textit{distance}, bila ada tetangga berjarak nol, hanya titik identik tersebut yang dihitung, sesuai perilaku \textit{scikit-learn}.
 
+Model akhir kelompok berada di \path{src/knn_final.py} dan tetap memakai kelas \texttt{KNN} di atas. Fungsi \texttt{date\_features} menambahkan hari ke- sejak 1 Januari 2017, hari dalam minggu dan tahun, tanggal pemesanan (tanggal kedatangan dikurangi \texttt{days\_before\_arrival}), serta harga total. Setelah pipeline numerik standar, setiap kolom $j$ dikalikan bobot $w_j=(\mathrm{MI}_j/\overline{\mathrm{MI}})^{0{,}5}\cdot m_j$. Nilai \textit{mutual information} $\mathrm{MI}_j$ dihitung hanya pada data latih, sedangkan $m_j$ adalah pengali per atribut asli. Kolom \textit{one-hot} mengikuti pengali atribut asalnya. Nilai \texttt{days\_before\_arrival} yang hilang, beserta tanggal pemesanan turunannya, diisi rata-rata 10 tetangga terdekat dari baris latih yang nilainya teramati, dengan jarak dihitung dari kolom lain. Subkelas \texttt{PowKNN} mengganti bobot tetangga $1/d$ menjadi $1/d^{q}$.
+
 \subsection{Implementasi \textit{Decision Tree Learning} (C4.5)}
 Kelompok memilih C4.5 karena varian ini secara alami menangani atribut numerik, atribut kategorikal, dan nilai hilang, sesuai kebutuhan dataset ini. Kelas \texttt{DecisionTree} pada \path{src/decision_tree.py} menyimpan simpul sebagai \texttt{TreeNode} berisi jumlah kelas berbobot, fitur pemisah, ambang atau kategori, anak, dan peluang cabang untuk nilai hilang.
 
